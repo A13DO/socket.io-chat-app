@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: 'http://127.0.0.1:5500', // Ensure this matches your front-end origin
+        origin: 'http://localhost:4200', // Ensure this matches your front-end origin
         methods: ['GET', 'POST'],
         credentials: true
     }
@@ -15,7 +15,7 @@ const io = new Server(server, {
 
 // Middleware
 app.use(cors({
-    origin: 'http://127.0.0.1:5500', // Ensure this matches your front-end origin
+    origin: 'http://localhost:4200', // Ensure this matches your front-end origin
     methods: ['GET', 'POST'],
     optionsSuccessStatus: 204 // For older browsers
 }));
@@ -30,24 +30,23 @@ const users = {};
 io.on("connection", (socket) => {
     console.log("New client connected: ", socket.id);
 
-    // socket.on('custom-event', (number, string, obj) => {
-    //     console.log(number, string, obj);
-    // });
-    socket.on('new-user', name => {
-        users[socket.id] = name;
-        socket.broadcast.emit("user-connected", name)
+    // ROOMS
+    socket.on('joinRoom', (roomId) => {
+        socket.join(roomId);
+        console.log(`${socket.id} joined room: ${roomId}`);
     });
 
-    // Handle chat message
-    socket.on('message', message => {
-        io.emit('message', {message: message, user: users[socket.id]}); // Broadcast the message to all connected clients
-        console.log(`Message received: ${message}`);
+    // Handle Room Chat Messages
+    socket.on('chat-room', (roomId, data) => {
+        if (roomId == '') {
+            console.log(`no Room`);
+        } else {
+            io.to(roomId).emit('chat-room', data);
+            console.log(`Message in room ${roomId}: ${data.text}`);
+        }
     });
 
-    socket.on('joinRoom', (room) => {
-        socket.join(room);
-        console.log(`${socket.id} joined room: ${room}`);
-    });
+
 
     socket.on('disconnect', () => {
         socket.broadcast.emit("user-disconnected", users[socket.id])
