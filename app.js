@@ -53,8 +53,17 @@ io.on("connection", (socket) => {
         delete users[socket.id];
     });
 });
+const selfReload = () => {
+    setInterval(() => {
+        const appUrl = 'https://e-commerce-api-wvh5.onrender.com';
+        fetch(`${appUrl}/ping`)
+            .then(response => console.log(`Reload successful: ${response.status}`))
+            .catch(error => console.error('Reload failed:', error));
+    }, 12 * 60 * 1000); // Ping every 12 minutes
+};
 
 const PORT = process.env.PORT || 3000; // Use environment variable or default to 3000
 server.listen(PORT, () => {
+    selfReload()
     console.log(`Server is running on http://localhost:${PORT}`);
 });
