@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
     // ROOMS
     socket.on('joinRoom', (roomId, peerId) => {
         socket.join(roomId);
-        console.log(`${socket.id} joined room: ${roomId}, ${peerId}`);
+        console.log(`${socket.id} joined room: ${roomId}, With peerID: ${peerId}`);
         socket.to(roomId).emit('newPeer', { peerId: peerId, userId: socket.id });
     });
 
