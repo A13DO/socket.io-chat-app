@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:4200', // Ensure this matches your front-end origin
+        origin: '*', // Ensure this matches your front-end origin
         methods: ['GET', 'POST'],
         credentials: true
     }
@@ -15,7 +15,7 @@ const io = new Server(server, {
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:4200', // Ensure this matches your front-end origin
+    origin: '*', // Ensure this matches your front-end origin
     methods: ['GET', 'POST'],
     optionsSuccessStatus: 204 // For older browsers
 }));
