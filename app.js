@@ -31,9 +31,10 @@ io.on("connection", (socket) => {
     console.log("New client connected: ", socket.id);
 
     // ROOMS
-    socket.on('joinRoom', (roomId) => {
+    socket.on('joinRoom', (roomId, peerId) => {
         socket.join(roomId);
-        console.log(`${socket.id} joined room: ${roomId}`);
+        console.log(`${socket.id} joined room: ${roomId}, ${peerId}`);
+        socket.to(roomId).emit('newPeer', { peerId: peerId, userId: socket.id });
     });
 
     // Handle Room Chat Messages
@@ -43,6 +44,7 @@ io.on("connection", (socket) => {
         } else {
             io.to(roomId).emit('chat-room', data);
             console.log(`Message in room ${roomId}: ${data.text}`);
+            
         }
     });
 
