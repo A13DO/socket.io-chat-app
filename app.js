@@ -3,6 +3,7 @@ const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io"); // Ensure this line is correct
 const authRouter = require("./routes/auth"); // Ensure this line is correct
+const usersRouter = require("./routes/users"); // Ensure this line is correct
 const connectDB = require("./db/connect");
 
 const app = express();
@@ -25,9 +26,9 @@ app.use(cors({
 // Middleware
 app.use(express.json()); 
 
-// // Serve static files from the public directory
-// app.use(express.static('public'));
+// Serve static files from the public directory
 app.use("/api/v1/auth", authRouter)
+app.use("/api/v1/users", usersRouter)
 
 const users = {};
 // Socket.IO connection

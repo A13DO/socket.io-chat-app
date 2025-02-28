@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const JWT = require("jsonwebtoken");
 const {register, login} = require("../controllers/auth");
 
 
